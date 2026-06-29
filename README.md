@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mortality Experience Study
 
 This project is a personal actuarial project designed to analyze life insurance mortality and lapse experience using Python.
