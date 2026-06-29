@@ -18,4 +18,4 @@ This project is a personal actuarial project designed to analyze life insurance 
 - NumPy
 - Matplotlib
 - Git
-- GitHub
+- GitHubgit
