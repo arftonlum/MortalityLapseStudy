@@ -14,9 +14,9 @@ def prepare_life_table(life_table: pd.DataFrame,
     life_table_year = life_table_year[["x", "q(x)"]]
 
     life_table_year = life_table_year.rename(columns={
-    "x": "attained_age",
-    "q(x)": "qx"
-    })
+        "x": "attained_age",
+        "q(x)": "qx"
+        })
     return life_table_year
 
 def combine_life_tables(
