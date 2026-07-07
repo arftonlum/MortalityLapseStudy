@@ -8,13 +8,13 @@ def assign_mortality_multiplier(portfolio, young = .9, middle = 1, old = 1.15):
         portfolio["attained_age"] < 50,
         young,
         np.where(
-            portfolio["attained_age"] >= 75,old,1.00,
+            portfolio["attained_age"] >= 75,old,middle,
         )
     )
     multiplier *= np.where(
         portfolio["policy_duration"] <= 5,
         0.85,
-        middle,
+        1,
     )
     noise = np.random.normal(
         loc=1.0,
@@ -29,6 +29,8 @@ def assign_mortality_multiplier(portfolio, young = .9, middle = 1, old = 1.15):
         0.70,
         1.30
     )
+    portfolio["mortality_multiplier"] = multiplier
+    return portfolio
     
 
 def simulate_deaths(portfolio: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
@@ -43,7 +45,7 @@ def simulate_deaths(portfolio: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
 
     portfolio["death"] = np.random.binomial(
         n=1,
-        p=portfolio["qx"] * multiplier
+        p=portfolio["qx"]
     )
 
     portfolio["expected_deaths"] = portfolio["qx"]
@@ -79,20 +81,23 @@ def summarize_experience(portfolio: pd.DataFrame) -> pd.DataFrame:
 
     return experience
 
-def summarize_by_age_band(portfolio: pd.DataFrame) -> pd.DataFrame:
-    bins = [20, 30, 40, 50, 60, 70, 80, 90, 101]
-    labels = [
-        "20–29",
-        "30–39",
-        "40–49",
-        "50–59",
-        "60–69",
-        "70–79",
-        "80–89",
-        "90–100"
-    ]
+def summarize_by_age_band(portfolio: pd.DataFrame, bins = None, labels = None) -> pd.DataFrame:
+    portfolio = portfolio.copy()
+    if bins is None:
+        bins = [20, 30, 40, 50, 60, 70, 80, 90, 101]
+    if labels is None:
+        labels = [
+            "20–29",
+            "30–39",
+            "40–49",
+            "50–59",
+            "60–69",
+            "70–79",
+            "80–89",
+            "90–100"
+        ]
 
-    portfolio["age_band"] = pd.cut(
+    age_band = pd.cut(
         portfolio["attained_age"],
         bins=bins,
         labels=labels,
@@ -102,7 +107,7 @@ def summarize_by_age_band(portfolio: pd.DataFrame) -> pd.DataFrame:
 
     band_experience = (
         portfolio
-        .groupby("age_band")
+        .groupby(age_band)
         .agg(
             exposure=("policy_id", "count"),
             expected_deaths=("expected_deaths", "sum"),
@@ -115,4 +120,4 @@ def summarize_by_age_band(portfolio: pd.DataFrame) -> pd.DataFrame:
         band_experience["expected_deaths"]
     )
 
-    band_experience
+    return band_experience
