@@ -121,3 +121,10 @@ def summarize_by_age_band(portfolio: pd.DataFrame, bins = None, labels = None) -
     )
 
     return band_experience
+
+def calculate_overall_ae(experience):
+    overall_AE = (
+        experience["actual_deaths"].sum() /
+        experience["expected_deaths"].sum()
+    )
+    return overall_AE
