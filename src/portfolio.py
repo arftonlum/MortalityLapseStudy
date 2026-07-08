@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 
 def generate_portfolio(n_policies=10000, seed=7911):
+    """
+    Generates a life insurance portfolio of individual life insurance polices with
+    issue age, gender, policy duration, and attained age. This function returns a dataframe
+    that will be used as a foundation for a mortality experience study.
+    """
     np.random.seed(seed)
 
     portfolio = pd.DataFrame({
