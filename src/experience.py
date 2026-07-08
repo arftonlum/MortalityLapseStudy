@@ -1,7 +1,20 @@
 import numpy as np
 import pandas as pd
 
+"""
+Functions for simulating and summarizing a mortality experience.
+
+Includes functions for assiging mortality assumptions, simulating deaths and producing
+actuarial experience studies.
+"""
+
+
 def assign_mortality_multiplier(portfolio, young = .9, middle = 1, old = 1.15):
+    """
+    Assigns simulated mortality multipliers to each policy based on attained age, policy durations
+    and some random variation. This helps created a mortality experience that will be
+    different from the expected mortalitty in SSA life tables.
+    """
     multiplier = np.ones(len(portfolio))
 
     multiplier *= np.where(
@@ -34,6 +47,10 @@ def assign_mortality_multiplier(portfolio, young = .9, middle = 1, old = 1.15):
     
 
 def simulate_deaths(portfolio: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
+    """
+    Simulates deaths after one year using expected mortality and the mortality multiplier.
+    Mortality is modeled as a bernoulli trial which produces one outcome per policy.
+    """
     portfolio = portfolio.copy()
 
     np.random.seed(seed)
@@ -54,6 +71,14 @@ def simulate_deaths(portfolio: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
 
 
 def summarize_experience(portfolio: pd.DataFrame) -> pd.DataFrame:
+    """
+    Summarize the mortality experience by attained age. 
+
+    Create an actuarial experience table contianing exposure, expected deaths, observed deaths,
+    mortality rates and Actual-to-Expected ratios for each attained age.
+
+    This table forms the basis for evaluating mortality experience.
+    """
     experience = (
         portfolio
         .groupby("attained_age")
@@ -82,6 +107,10 @@ def summarize_experience(portfolio: pd.DataFrame) -> pd.DataFrame:
     return experience
 
 def summarize_by_age_band(portfolio: pd.DataFrame, bins = None, labels = None) -> pd.DataFrame:
+    """
+    Group mortality experience into broader age bands to produce more stable mortality
+    metrics to rudece random variation seen at individual ages. 
+    """
     portfolio = portfolio.copy()
     if bins is None:
         bins = [20, 30, 40, 50, 60, 70, 80, 90, 101]
@@ -123,6 +152,9 @@ def summarize_by_age_band(portfolio: pd.DataFrame, bins = None, labels = None) -
     return band_experience
 
 def calculate_overall_ae(experience):
+    """
+    Calculate overall Actual-to-Expected ratio for this mortality experience.
+    """
     overall_AE = (
         experience["actual_deaths"].sum() /
         experience["expected_deaths"].sum()

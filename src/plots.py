@@ -2,8 +2,19 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+"""
+Visualization functions for the mortality experience study.
+
+Provides plotting functions for comparing expected and actualt mortality experience.
+"""
+
+
+
 
 def plot_expected_vs_actual(experience):
+    """
+    Plot expected and observed deaths by attained age.
+    """
     plt.figure(figsize=(10, 6))
 
     plt.plot(
@@ -30,6 +41,10 @@ def plot_expected_vs_actual(experience):
 
 
 def plot_ae_by_age(experience):
+    """
+    Displays the ratio of actual to expected deaths for each attained age with
+    a reference line at 1.0 indicating expected mortality experience (a perfect prediction).
+    """
     plt.figure(figsize=(10,6))
 
     plt.plot(
@@ -56,6 +71,10 @@ def plot_ae_by_age(experience):
     plt.show()
 
 def plot_ae_by_age_band(band_experience):
+    """
+    Plot the Actual-to-Expected mortality ratio by age band to reduce random variation and
+    be more interpretable.
+    """
     plt.figure(figsize=(9,5))
 
     plt.bar(
