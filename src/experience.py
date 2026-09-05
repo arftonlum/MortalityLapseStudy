@@ -62,7 +62,7 @@ def simulate_deaths(portfolio: pd.DataFrame, seed: int = 42) -> pd.DataFrame:
 
     portfolio["death"] = np.random.binomial(
         n=1,
-        p=portfolio["qx"]
+        p=portfolio["actual_qx"]
     )
 
     portfolio["expected_deaths"] = portfolio["qx"]
