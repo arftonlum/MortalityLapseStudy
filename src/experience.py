@@ -74,7 +74,7 @@ def summarize_experience(portfolio: pd.DataFrame) -> pd.DataFrame:
     """
     Summarize the mortality experience by attained age. 
 
-    Create an actuarial experience table contianing exposure, expected deaths, observed deaths,
+    Create an actuarial experience table containing exposure, expected deaths, observed deaths,
     mortality rates and Actual-to-Expected ratios for each attained age.
 
     This table forms the basis for evaluating mortality experience.
@@ -109,7 +109,7 @@ def summarize_experience(portfolio: pd.DataFrame) -> pd.DataFrame:
 def summarize_by_age_band(portfolio: pd.DataFrame, bins = None, labels = None) -> pd.DataFrame:
     """
     Group mortality experience into broader age bands to produce more stable mortality
-    metrics to rudece random variation seen at individual ages. 
+    metrics to reduce random variation seen at individual ages. 
     """
     portfolio = portfolio.copy()
     if bins is None:
